@@ -1,17 +1,28 @@
 
 # to have access to environmental variables.
 import os
-from flask import Flask
+#importing redirect module from flask library.
+from flask import Flask, redirect
 
 #initialising and defining our new flask application
 app = Flask(__name__)
 #creating empty list
 messages = []
 
-#now creating a function (add_messages) which takes username and message and appends to the list.
+#now creating a function (add_messages) which takes username and message as arguments and appends to the list.
+
 def add_messages(username, message):
     #then calling append method to messages list and append a string, using format method. Positional indicators {0}{1} are omitted, as in python3, it's optional to include them or not. If left out, first set of curley brackets automatically refers to 1st argument, 2nd set of curley brackets refer to 2nd argument.  
+    
+    #presenting our messages video: adding docstring.
+    """add messages to messages list"""
     messages.append("{}:{}".format(username, message))
+    
+#creating function that will get all messages for us.
+def get_all_messages():
+    """get all messages and separate using <br> - break tag"""
+    #using <br> to join all elements in messages together.
+    return"<br>".join(messages)
 
 #creating app route decorator for index page
 @app.route("/")
@@ -30,18 +41,31 @@ def user(username):
     #using docstring to document. Good practice to document functions.
     """Display chat messages"""
     #changing message using positional indicator and curley brackets, using .format method and sending in username and messages list.
-    return "Welcome, {0}".format(username, messages)
+        #correcting error, as 2 arguments listed but referenced only 1, so adding {1}. This will now display messages list.
+    #changing message arguments to call the messages list.
+    
+    #USERS PERSONALISED WELCOME PAGE(route decorator)
+    #messages appear on separate lines.
+    return "<h1>Welcome, {0}</h1>{1}".format(username, get_all_messages())
     
 #creating another app route decorator for sending message.
 @app.route("/<username>/<message>")
 #creating function which binds to decorator, taking 2 arguments (username and message)
+
+#def send_message(username, message):
 def send_message(username, message):
     
     #Now want to store message in a list. Using docstring here to document.
     """Create a new message and redirect back to the chat page"""
     
     #using .format method to display message.
-    return "{0}: {1}".format(username, message)
+    
+    #presenting our messages video: removing format method and calling add_messages function with username, message as arguments.
+    #return "{0}: {1}".format(username, message)
+    add_messages(username, message)
+    #redirecting back to users welcome page.
+    return redirect(username)
+
 
 #environmental variables in cloud9 and also which we set ourselves in Heroku.    
 app.run(host=os.getenv("IP"), port=int(os.getenv("PORT")), debug=True)
