@@ -21,16 +21,23 @@ def add_messages(username, message):
     #then calling append method to messages list and append a string, using format method. Positional indicators {0}{1} are omitted, as in python3, it's optional to include them or not. If left out, first set of curley brackets automatically refers to 1st argument, 2nd set of curley brackets refer to 2nd argument. 
     #.creating 'now' variable using .now() method to get current time).
     now = datetime.now().strftime("%H:%M:%S")
+    
+    #creating dictionary in key-value pairs to store variables, rather than list (as can only access limited info).
+    messages_dict = {"timestamp": now, "from": username, "message": message}
     #presenting our messages video: adding docstring.
     """add messages to messages list"""
     #adding brackets, {} and now() method to get current time. 
-    messages.append("({}) {}:{}".format(now, username, message))
+    #modifiying messages.append, so as to append whole dictionary. 
+    messages.append(messages_dict)
+    #messages.append("({}) {}:{}".format(now, username, message))
     
 #creating function that will get all messages for us.
 def get_all_messages():
     """get all messages and separate using <br> - break tag"""
     #using <br> to join all elements in messages together.
     return"<br>".join(messages)
+
+
 
 #creating app route decorator for index page
 @app.route("/", methods = ["GET", "POST"])
@@ -64,15 +71,16 @@ def user(username):
     
     #USERS PERSONALISED WELCOME PAGE(route decorator)
     #messages appear on separate lines.
-    return "<h1>Welcome, {0}</h1>{1}".format(username, get_all_messages())
     
+    #return "<h1>Welcome, {0}</h1>{1}".format(username, get_all_messages())
+    return "<h1>Welcome, {0}</h1>{1}".format(username, messages)
+
 #creating another app route decorator for sending message.
 @app.route("/<username>/<message>")
 #creating function which binds to decorator, taking 2 arguments (username and message)
 
-#def send_message(username, message):
 def send_message(username, message):
-    
+   
     #Now want to store message in a list. Using docstring here to document.
     """Create a new message and redirect back to the chat page"""
     
@@ -85,7 +93,7 @@ def send_message(username, message):
     return redirect(username)
 
 
+
 #environmental variables in cloud9 and also which we set ourselves in Heroku.    
 app.run(host=os.getenv("IP"), port=int(os.getenv("PORT")), debug=True)
-
 
