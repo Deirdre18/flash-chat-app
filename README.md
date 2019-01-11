@@ -9,10 +9,8 @@ The internet was built for communication.
 In fact, the first online chat application dates right back to 1973.
 But this was only for a limited number of users at the University of Illinois.
 In 1980, CompuServe released the first widely available chat application.
-But in more recent times, since the Internet has become ubiquitous, chat rooms and chat applications have popped up everywhere.
-If you play any multiplayer game, then chances are it has a chat room.
-In this lesson, we're going to build our mini-project, which will be a simplified chat application using the Flask framework.
-Purpose of the project and throughout the project we're going to:-
+But in more recent times, since the Internet has become ubiquitous, chat rooms and chat applications have popped up everywhere. If you play any multiplayer game, then chances are it has a chat room.
+In this lesson, we're going to build our mini-project, which will be a simplified chat application using the Flask framework. Purpose of the project and throughout the project we're going to:-
 
 (1) learn how to create and run our Flask project.
 

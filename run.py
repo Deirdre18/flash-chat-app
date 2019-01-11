@@ -1,22 +1,30 @@
 
 # to have access to environmental variables.
 import os
-#importing redirect module from flask library.
-from flask import Flask, redirect
+#importing redirect module from flask library and datetime module.
+
+#importing date timestamp from datetime module.
+from datetime import datetime
+#importing modules from flask.
+from flask import Flask, redirect, render_template, request, session
 
 #initialising and defining our new flask application
 app = Flask(__name__)
 #creating empty list
+#setting a session ID, using random list of letters, numbers and characters. Usually it is set as environmental variable (like IP address), but here we're setting it as a string. 
+app.secret_key = "randomstring123"
 messages = []
 
 #now creating a function (add_messages) which takes username and message as arguments and appends to the list.
 
 def add_messages(username, message):
-    #then calling append method to messages list and append a string, using format method. Positional indicators {0}{1} are omitted, as in python3, it's optional to include them or not. If left out, first set of curley brackets automatically refers to 1st argument, 2nd set of curley brackets refer to 2nd argument.  
-    
+    #then calling append method to messages list and append a string, using format method. Positional indicators {0}{1} are omitted, as in python3, it's optional to include them or not. If left out, first set of curley brackets automatically refers to 1st argument, 2nd set of curley brackets refer to 2nd argument. 
+    #.creating 'now' variable using .now() method to get current time).
+    now = datetime.now().strftime("%H:%M:%S")
     #presenting our messages video: adding docstring.
     """add messages to messages list"""
-    messages.append("{}:{}".format(username, message))
+    #adding brackets, {} and now() method to get current time. 
+    messages.append("({}) {}:{}".format(now, username, message))
     
 #creating function that will get all messages for us.
 def get_all_messages():
@@ -25,14 +33,24 @@ def get_all_messages():
     return"<br>".join(messages)
 
 #creating app route decorator for index page
-@app.route("/")
+@app.route("/", methods = ["GET", "POST"])
 #this is the function which will be bound to our decorator
 def index():
+    #creating if statement to say tht if request method = POST, then we want to create a new variable called username. 
+    if request.method == "POST":
+        
+        # So we're going to create our session username variable - session["username"]. And we want that to be equal to request.form["username"], so the username that we typed and posted from our form.
+        session["username"] = request.form["username"]
+        
+        #then we want to an another if statement to check if the username exists, and if so then we're going to redirect to personal chat page. So our username here and our username in session are both the same.
+        if "username" in session:
+            return redirect(session["username"])
     
     """Main page with instructions"""
     #removing <Hello There>. 
     #don't use <> for sending message, as this will be interpreted by html and won't display properly.
-    return "To send a message use /USERNAME/MESSAGE"
+    return render_template("index.html")
+    #return "To send a message use /USERNAME/MESSAGE"
 
 #creating routes/views using @app decorator, using <>, this then gets treated as a variable.
 @app.route("/<username>")
