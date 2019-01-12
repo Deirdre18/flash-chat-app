@@ -756,4 +756,71 @@ But first, remember the things that are required to deploy an app to Heroku.
 Firstly, we need to have generated a requirements.txt file.
 Secondly, we need a Procfile.
 We also need to have created a Heroku app.
-Then, in Heroku, we set any config or environment 
+Then, in Heroku, we set any config or environment variables.
+And finally, we use Git to push our app to Heroku.
+We're going to go through these steps one by one.
+But first, I want to modify my run.py file to get it ready for deployment.
+The first thing I want to do in my run.py file is make the secret key an environment variable.
+So to do that, on line 7, I'm going to say app.secret_key = os.getenv
+And it's going to look for a variable called "SECRET".
+I'm going to leave "randomstring123" in there as the second argument because this becomes the default value if Flask can't find a variable called SECRET.
+We're going to add these default our fallback values to our IP and port in our app.run() method.
+I'm going to give the default value of 0.0.0.0 for the IP and 5000 for the port.
+And this will actually mean that we don't have to set those in Heroku.
+We're also going to set debug = false because we don't want debug = true to be set in production.
+Now that that's done, we already have our requirements.txt file, so let's open our terminal window and create a Procfile.
+To do that, I'm going to type echo web: python run.py > Procfile.
+And you'll see in the left pane that Procfile is created.
+Remember to use a capital P.
+Now we've done that, we can add and commit everything to Git.
+So git add .
+And git commit -m "Added Procfile for deployment"
+Now we can run our heroku login command.
+And I'm just going to enter my email address, matt.rudge@codeinstitute.net, and my password to log in to Heroku.
+Now that I'm logged in, I can create a new Heroku app.
+So to do that, we use heroku apps:create.
+And I'm going to call my app flask-chatroom-project.
+And we can see that that's created.
+It gives us a Git address here, as well.
+The handy thing is that when we use the Heroku command to create the app, it automatically links it to Git.
+So if I run git remote -v, we can see that my Heroku reference has already been added.
+Before we push our app to Heroku, however, let's set our environment variables.
+So I'm just going to refresh my Heroku dashboard.
+And we can see that my flask-chatroom-project app has been created.
+Now click on that, go to Settings, and then Reveal Config Vars.
+At the moment, we don't have any.
+So I'm going to create my secret key.
+Remember, we called it SECRET.
+And I'm just going to give that the value of secretproductionkey1234.
+Then that's added.
+Okay, now that's done, all we need to do is push the app to Heroku.
+So let's go back to Cloud9, back to our terminal window, and type git push -u heroku master.
+And this will push the app to Heroku.
+And this can take some time to build.
+First of all, it needs to build the source and then install everything from our requirements.txt file.
+And using the magic of technology, we've cut down the process a little bit.
+But we can see that it says that it's now deployed.
+So if we go back to our app in Heroku and click on open app, we can see that it's up and running.
+I'll choose my username, go to chat, and I'll type a message, which is working.
+I'll open up the flask-chatroom-project in another window.
+I'm going to use a Chrome incognito window to do this.
+I'll log in as Yoni here.
+Then we can see that my chat is there.
+Yoni will say Hi Matt.
+And when I go back to my own homepage, I can see that the message is there.
+So our project is now deployed and working.
+And maybe as a personal challenge, you might like to have a look at how to add other functionality to this, such as, maybe, adding a clear chat history link and styling it so that it looks nice.
+But for us, this concludes our mini project.
+In this section, you've learned a lot about Flask and Python.
+You've come a long way as a developer.
+We've seen how to create a Flask app and how to create basic and advanced routes.
+You've seen how to read in data from a JSON file and how to use the Flask templating language to display that nicely.
+You've seen how to use session variables and how to deploy our finished product to Heroku.
+You're now ready to create your own Flask milestone project.
+Before you do, though, we recommend that you really give some thought to the logic of your project.
+And maybe revisit some of the concepts that we've looked at in the past few units.
+For example, you've seen how to use session variables, which are great for temporary storage.
+Below this video, we've included a link to a basic Flask quiz game, which will help you to understand how you could use session variables to keep track of your high score.
+Well done for completing the practical Python module of the course!
+We wish you all the best with your milestone project and look forward to seeing you in our next module.
+
