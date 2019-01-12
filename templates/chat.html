@@ -1,0 +1,18 @@
+<!--explanation mark and tab to put in standard html boilerplate.-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--adding variable for username, another check to make sure html template is working.-->
+    <title>Chat page for {{ username }}</title>
+</head>
+<body>
+    <!--displaying welcome and chat messages as previously done. Passing in username variable from our view TO template.-->
+    <h1>Welcome, {{ username }}</h1>
+    <!--passing in variable for chat_messages to template.-->
+    {{ chat_messages }}
+    
+</body>
+</html>

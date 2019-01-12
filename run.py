@@ -73,7 +73,10 @@ def user(username):
     #messages appear on separate lines.
     
     #return "<h1>Welcome, {0}</h1>{1}".format(username, get_all_messages())
-    return "<h1>Welcome, {0}</h1>{1}".format(username, messages)
+    #return "<h1>Welcome, {0}</h1>{1}".format(username, messages)
+    
+    #adding template to pass in chat.html, using two variables (username, messages) as arguments.
+    return render_template ("chat.html", username = username, chat_messages = messages)
 
 #creating another app route decorator for sending message.
 @app.route("/<username>/<message>")

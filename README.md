@@ -476,5 +476,55 @@ So in this section, we've expanded our chat application by adding timestamps, an
 In our next series of videos, we're going to add even more features to our chat app.
 We'll refactor our code and then deploy the finished project to Heroku.
 
+# Refactoring To Use Chat.Html Instead Of A Single String
+
+## What is it?
+
+An HTML file
+
+
+## What does it do?
+
+It will display our chat messages
+
+
+## How do you use it?
+
+By passing it the necessary chat messages
+
+LESSON:
+
+In our previous video, we changed how the messages are stored.
+But this seemed to break how our messages are displayed.
+To improve this, let's start displaying our messages in a template.
+So back in our project, we're going to create a new HTML file in our templates directory.
+And we're going to call that chat.html.
+When that's created, we can open it for editing and then do ! and tab to put in the standard HTML boilerplate from Cloud9.
+Now we want to display our welcome message and the chat messages like we were doing before.
+So we'll put in <h1>.
+We'll say Welcome.
+And we're going to pass in the username variable from our view.
+Underneath that, we're going to put in the chat_messages variable.
+And these are both variables that we're going to pass through from our view to the template.
+In fact, just to make things look a little bit nicer, in our title, we're going to change it so that it says Chat page for.
+And then our username variable again.
+And this will be another way we can make sure that our HTML template is working.
+Okay, now that our template is made, we need to put in these two variables so that we can display it
+To do that, we'll go back to our run.py file.
+And in our user view, we can take out this return.
+Now we want to do a return with render_template.
+And it's the chat.html template that we want to render.
+The arguments that we're passing through are username, as we said.
+And that's going to be equal to the username that we're passing into this function.
+And chat_messages is going to be equal to our messages list.
+Now that that's done, we can save it, go back to our chat page, and refresh it.
+And because our server has restarted, the list is now empty.
+But we can see that it's there.
+In fact, if I just pull down so that you can see the title of this page, you can see now that it says Chat page for aaron.
+So our HTML template is being rendered correctly.
+It might look like we're just back in the same place where we were at the start of this video.
+But we're actually in a much better position.
+Because now we're using actual HTML, we can start formatting our messages in a much nicer way and add more functionality.
+We're going to do that in our next video by adding in some JavaScript.
   
 
