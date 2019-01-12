@@ -526,5 +526,234 @@ It might look like we're just back in the same place where we were at the start 
 But we're actually in a much better position.
 Because now we're using actual HTML, we can start formatting our messages in a much nicer way and add more functionality.
 We're going to do that in our next video by adding in some JavaScript.
-  
 
+# Simple Long Polling With JavaScript
+ 
+## What is it?
+
+Long polling
+
+## What does it do?
+
+Refreshes the page after a specified period of time
+
+## How do you use it?
+
+By using JavaScript's setTimeout function
+
+LESSON:
+ 
+Let's start building on the foundation of our chat.html template.
+In this video, I want to achieve two things.
+Firstly, to get the messages displaying in a more attractive, formatted way.
+And secondly, to put in some JavaScript that will refresh the page so that we can always see the latest messages.
+Let's start with formatting.
+The first thing I'm going to do is remove my chat_messages variable here.
+And the logic that we're about to use may be familiar to you from our Thorin & Company About page.
+And that's the "{%" notation: {% for message in chat_messages %}
+I'll add in my {% endfor %} now, as well, so that the templating language knows where the block ends.
+So as we loop through the chat_messages list, message will be set to an individual message dictionary.
+And because we're using a dictionary, we can use the dot notation to get the values out of the keys, like this.
+So I'm going to put ({{ message.timestamp }})
+And then {{ message.from }}:
+And then {{ message.message }}
+And each of the names following the dot corresponds with the name of one of the keys that's in our dictionary.
+Okay, let's save that and see what happens.
+I'm going to refresh the page, and my empty list vanishes, which is good.
+And we'll pass in a message from Aaron that says hello world.
+And now we can see that that is displayed in a much more attractive way with our timestamp, our username, and also the message.
+But sending a message here means that it won't appear on anyone else's page, such as Yoni's, unless I do a manual refresh.
+We can see when I refreshed that it appears.
+Similarly, if I send a message from Yoni to Aaron that says "Hi Aaron!", then when I go back to Aaron's page, again, I have to refresh in order for the message to appear.
+To fix this, I can add some JavaScript in our HTML file.
+So let's go back to our chat.html file.
+And I'm just going to wrap the lines here so that this displays a bit nicer.
+And then, just inside the <body> tags before they close, let's add some <script> tags. And I am going to create a variable: let timer =, and then I am going to call the built-in JavaScript setTimeout() function that runs a function at a given interval. So my function is going to be location.reload ,which will refresh the page. The second argument to my setTimeout() function is a time value, and the time value is in milliseconds.
+I have it set to 5,000 milliseconds, or 5 seconds.
+So every 5 seconds the page, will refresh, which means that every 5 seconds, the latest messages will be displayed. Let us just test that and see. I will refresh the page. And we will send a test message and see what happens.
+So we will go to Yoni's page. And I'm going to send a message from Yoni to Aaron saying "are you there aaron?" We can see that it appears straightaway on Yoni's page, but now when I switch back to Aaron's, the message is there.
+Similarly, when I send a message back from Aaron to Yoni, it appears immediately on Aaron's page. And now, it's there on Yoni's page, too.
+So we do not need to manually refresh to make sure that our messages are there.
+There are still two more things that we need to do before we can deploy our project. And we are going to have a look at those in our next couple of videos.
+
+
+# Creating A Message Textbox
+ 
+## What is it?
+
+A textbox to allow us to enter a message instead of using the URL
+
+## What does it do?
+
+Improves the functionality of our chat app
+
+## How do you use it?
+
+By creating a textbox and using the POST form method
+
+LESSON:
+
+In our previous video, we mentioned that there were two more things we wanted to do before deploying our project.
+The first one is to clean up the chat.
+Right now, we use a URL to send the chat message, which is not particularly friendly, especially since we now no longer have instructions explaining how to do it.
+So let's start by adding a textbox to our chat page.
+We'll go back to Cloud9 and to our chat.html template.
+And underneath the Welcome heading, I'm going to create a new form.
+Again, this form is going to use the POST method, similar to how we obtained the username on our index.html page.
+This time, we're going to use a text area, rather than text input.
+And we'll set the cols attribute to "50", for 50 columns, the rows attribute to "4", we'll give it a name of "message" so that we can refer to it in run.py, and we'll give it the ID of message, which we'll need a little bit later.
+Underneath my text area then, I'm going to put in a break, a <br>, and then a <button> that says Send message.
+So we can save that.
+We'll go back now to our chat page and see if the text box appears.
+Which it does, and that's exactly the way that we want it to look.
+Obviously, at the moment, that doesn't do anything. We now need to wire it up in our run.py file.
+So let's go to our user view.
+First of all, we need to add the ability to accept the POST method.
+So in our root decorator, we'll put a comma and then methods = ["GET", "POST"]
+And then we need to check to see if a message has been posted from the form.
+If so, we want to add it to the messages list.
+As we did before, we'll type if request.method == "POST"
+Then we'll obtain some variables.
+We'll get username from our session variable; username = session ["username"].
+The message obviously came from our form so that will be part of the request object: message = request.form["message"].
+Then we'll call our add_messages() function with the two variables that we've just created, username and message.
+And finally, we will do return redirect(session["username"]).
+What we're doing, really, is just obtaining our username and our message variables.
+And then we're going to send those both in to our add_messages() function to add them to the list.
+Okay, let's test that and see if it works.
+And as we can see, when I start typing, I have an immediate problem.
+I get as far as H, and the page reloads.
+The page is still refreshing while we're typing, so if we type a long message, we're going to lose it.
+Even if I type a very short message, I still have to go quickly, just to be able to get that in.
+To fix this, we need to adjust our JavaScript.
+So let's go back to our chat.html file and have a look at what we need to do in our JavaScript.
+Above our timer variable, I'm going to create a new variable.
+It's going to say let textbox = document.getElementByID("message").
+Now I'm going to add an event to our textbox.
+I'm going to say: textbox.onkeydown = function(e)
+So whenever a key is pressed in the textbox, this function will be run.
+The first thing we'll do is run the clearTimeout() function with our timer variable.
+And the second thing that we're going to do is start the timer again, using the setTimeout() function.
+This code is effectively a copy of the code that's above.
+We'll just do the location.reload() again for 5,000 milliseconds.
+So what's happening here?
+Well, the onkeydown() function runs whenever there's a key press.
+The clearTimeout() function stops the timer, and the code afterwards starts it again.
+This means that we effectively get 5 seconds per key press before the page refreshes, which should be sufficient to type a message.
+Let's try it again.
+This time, I'm going to type a reasonably long message.
+Hello world, how are you all?
+We can see the page doesn't reload, and we've got time to type our message.
+Maybe you're wondering, though, why we did a return redirect back in our run.py file when we're already returning the template underneath.
+Couldn't we just let it run on to the general render_template() function?
+Well, let's comment the line out and see what happens.
+Control + "/" on a PC, or command + "/" on a Mac to comment the line out.
+We'll save it.
+We'll refresh our chat page, which means we'll lose the chats that are here.
+We'll type in a message, and then we'll be patient and see what happens.
+So we'll send the message.
+And we wait.
+And as we can see, the message is coming up again.
+The problem is that every time the page reloads, it's resending the post data.
+So the messages will continue forever.
+We get around this by using a redirect, rather than the standard render_template.
+So if I uncomment that again and save it, the server will restart. We'll refresh, and it's resubmitting the form data.
+But now it's working properly.
+The messages are not continually being added to the list.
+So our chat app is nearly complete.
+The last thing that we need to do before deployment is some tidying up.
+And we'll do that in the next video of this section.
+
+# Simplifying Our Code
+ 
+## What is it?
+
+Code refactoring
+
+## What does it do?
+
+Simplifies our code
+
+## How do you use it?
+
+By making our code more understandable
+
+LESSON:
+
+In our previous videos, we've got our chat app so that it's now functioning correctly.
+In this video, we want to do some tidying up before we finally deploy our project to Heroku.
+So let's go back to our run.py file and see what changes might need to be made.
+The first thing I want to address is our add_messages() function.
+And initially, I have a problem with the name.
+It's not strictly correct.
+We're only adding one message each time, not many messages.
+So let's change it to just add_message.
+Of course, we also have to make that change in our user view where we're calling it as well.
+So we'll change it there to add_message.
+The second problem that I have is that in our add_message() function, we don't actually need this variable.
+It's unnecessary.
+We're not mutating it or changing it.
+We're just calling it on the next line.
+So let's get rid of it.
+We'll take the dictionary, and we'll paste it directly into the append() method.
+And now we can delete that line.
+It's one of my personal laws of programming that given enough time to refactor, 80% of code is unnecessary.
+The other thing I'd like to do is use url_for like we did in the Thorin & Company site.
+This is better practice.
+So let's go up to line 3, and from our Flask library, we'll import the url_for module as well.
+Now in our index view, we can change our redirect so that instead of just redirecting to a hard-coded URL, which is pulling from our username variable, then we can use url_for and the name of our view, which is user.
+And then we're going to pass in username = session["username"].
+And we need to do the same, then, in our user view as well.
+Now, I've just said that oftentimes 80% of code is unnecessary.
+But this is actually more code. It looks longer.
+That's true, but it's much better practice.
+This is so that if we change the URL, then we don't have to worry about what redirects may be calling it directly.
+I do want to change my URL, too.
+I don't like the fact that the chat page is here at /username.
+If I wanted to grow this project and have an about page or a contact page, then my URL naming would be very messy.
+So I'm going to change this URL to '/chat /username'.
+The other thing I need to change is my docstring because now the docstring is not accurate.
+We don't just display chat messages. We actually have the ability to add to them using the POST method.
+So I'm just going to update my docstring so that it's accurate and say """Add and display chat messages""".
+Finally, now we're using the textbox for our chat.
+We no longer need this '/username/message' route and view so that can be removed as well, also shortening our code.
+So we've done a bit of refactoring.
+Let's just check to see that everything still works.
+When I go back here, now I have a 404 because I'm still trying to go to the /aaron URL that no longer exists.
+If I go to the homepage, it redirects me now to /chat/aaron.
+So I'm going to type a message.
+Put it in.
+And it works.
+So everything is okay with our chat app.
+We can go back now, open up a terminal window, check what files we've changed, and add them to Git.
+So we'll open a new terminal.
+We'll run git status.
+And here we can see that I have a few files that I've changed.
+So I'll do git add .
+And now we'll do git commit -m and a commit message that explains what functionality we've added.
+And that's done.
+So now that our chat app is working okay and we've committed it to Git, in our next video we'll deploy our finished product to Heroku.
+
+# Heroku Deployment
+ 
+## What is it?
+
+Heroku
+
+## What does it do?
+
+Hosts our project
+
+## How do you use it?
+
+Creating a new Heroku app to host our code
+
+LESSON:
+
+Now it's time to unleash our Flask chat app in the wild.
+We're going to use what we learned in the Thorin & Company lesson to deploy it to Heroku.
+But first, remember the things that are required to deploy an app to Heroku.
+Firstly, we need to have generated a requirements.txt file.
+Secondly, we need a Procfile.
+We also need to have created a Heroku app.
+Then, in Heroku, we set any config or environment 
