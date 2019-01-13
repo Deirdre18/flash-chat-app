@@ -2,8 +2,6 @@
 # to have access to environmental variables.
 import os
 #importing redirect module from flask library and datetime module.
-
-#importing date timestamp from datetime module.
 from datetime import datetime
 #importing modules from flask.
 from flask import Flask, redirect, render_template, request, session

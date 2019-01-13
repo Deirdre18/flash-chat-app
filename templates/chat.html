@@ -9,10 +9,23 @@
     <title>Chat page for {{ username }}</title>
 </head>
 <body>
+    
     <!--displaying welcome and chat messages as previously done. Passing in username variable from our view TO template.-->
     <h1>Welcome, {{ username }}</h1>
     <!--passing in variable for chat_messages to template.-->
-    {{ chat_messages }}
+    <!--removing chat messages and instead using % notation templating to format, making more attractive (as in Thorin & Co website). So as we loop through chat messages, message will be set to an individual message dictionary.-->
+    {% for message in chat_messages %}
+    
+    <!--as using dictionery, we can use dot notation to get the values out of the keys. Each of the names after dot corresponds to one of the names that's in our dictionery, hence extracting the value from keys.-->
+         <p>({{ message.timestamp }}) {{ message.from }}: {{ message.message}}</p>
+    <!--adding end block notation, so template knows where block ends.-->
+    
+    {% endfor %} 
+    
+    <script>
+    //calling build-in javascript setTimeout function(), that runs a function at a given interval, and has 2 arguments - location.reload() and 5000 milliseconds (5 seconds).
+        let timer = setTimeout(function(){locaton.reload();}, 5000)
+    </script>
     
 </body>
 </html>
