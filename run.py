@@ -10,7 +10,8 @@ from flask import Flask, redirect, render_template, request, session, url_for
 app = Flask(__name__)
 #creating empty list
 #setting a session ID, using random list of letters, numbers and characters. Usually it is set as environmental variable (like IP address), but here we're setting it as a string. 
-app.secret_key = "randomstring123"
+#making secret key an environmental variable and leaving "randomsring123" as default value. 
+app.secret_key = (getos.getenv ("SECRET", "randomstring123")
 messages = []
 
 #now creating a function (add_messages) which takes username and message as arguments and appends to the list.
@@ -116,6 +117,7 @@ def user(username):
 
 
 
-#environmental variables in cloud9 and also which we set ourselves in Heroku.    
-app.run(host=os.getenv("IP"), port=int(os.getenv("PORT")), debug=True)
+#environmental variables in cloud9 and also which we set ourselves in Heroku.  
+#adding default/fall-back values to IP and PORT. Setting debg=False, as we don't want debug=True set in production. 
+app.run(host=os.getenv("IP", 0.0.0.0), port=int(os.getenv("PORT", 5000)), debug=False)
 
