@@ -23,7 +23,7 @@ def add_messages(username, message):
     #creating dictionary in key-value pairs to store variables, rather than list (as can only access limited info).
     messages_dict = {"timestamp": now, "from": username, "message": message}
     #presenting our messages video: adding docstring.
-    """add messages to messages list"""
+    """add messages to 'messages' list"""
     #adding brackets, {} and now() method to get current time. 
     #modifiying messages.append, so as to append whole dictionary. 
     messages.append(messages_dict)
@@ -57,8 +57,10 @@ def index():
     return render_template("index.html")
     #return "To send a message use /USERNAME/MESSAGE"
 
+
 #creating routes/views using @app decorator, using <>, this then gets treated as a variable.
-@app.route("/<username>")
+#adding ability to accept post method in user view.
+@app.route('/<username>', methods = ["GET", "POST"])
 #argument of username
 def user(username):
     #using docstring to document. Good practice to document functions.
@@ -73,8 +75,22 @@ def user(username):
     #return "<h1>Welcome, {0}</h1>{1}".format(username, get_all_messages())
     #return "<h1>Welcome, {0}</h1>{1}".format(username, messages)
     
+   
+    #Creating a Message Textbox Video: Checking if message sent and adding to messages list.
+    if request.method == "POST":
+        #obtaining 2 variables, username and message and sending both in to add_messages function to add to messages list.
+        username = session["username"]
+        #messages came from form, so using request method.
+        message = request.form["message"]
+        #return to username
+        add_messages(username, message)
+        return redirect(session["username"])
+    
     #adding template to pass in chat.html, using two variables (username, messages) as arguments.
-    return render_template ("chat.html", username = username, chat_messages = messages)
+        
+    return render_template("chat.html", username = username, chat_messages = messages)
+    
+    
 
 #creating another app route decorator for sending message.
 @app.route("/<username>/<message>")
@@ -92,6 +108,8 @@ def send_message(username, message):
     add_messages(username, message)
     #redirecting back to users welcome page.
     return redirect(username)
+
+    
 
 
 
