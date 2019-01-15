@@ -4,7 +4,7 @@ import os
 #importing redirect module from flask library and datetime module.
 from datetime import datetime
 #importing modules from flask.
-from flask import Flask, redirect, render_template, request, session
+from flask import Flask, redirect, render_template, request, session, url_for
 
 #initialising and defining our new flask application
 app = Flask(__name__)
@@ -15,19 +15,21 @@ messages = []
 
 #now creating a function (add_messages) which takes username and message as arguments and appends to the list.
 
-def add_messages(username, message):
+def add_message(username, message):
     #then calling append method to messages list and append a string, using format method. Positional indicators {0}{1} are omitted, as in python3, it's optional to include them or not. If left out, first set of curley brackets automatically refers to 1st argument, 2nd set of curley brackets refer to 2nd argument. 
     #.creating 'now' variable using .now() method to get current time).
     now = datetime.now().strftime("%H:%M:%S")
     
     #creating dictionary in key-value pairs to store variables, rather than list (as can only access limited info).
-    messages_dict = {"timestamp": now, "from": username, "message": message}
+    #moving messages_dict into messages.append, as we're not making changes/mutating it, but just calling it on next line. 
+    #messages_dict = {"timestamp": now, "from": username, "message": message}
     #presenting our messages video: adding docstring.
     """add messages to 'messages' list"""
     #adding brackets, {} and now() method to get current time. 
     #modifiying messages.append, so as to append whole dictionary. 
-    messages.append(messages_dict)
-    #messages.append("({}) {}:{}".format(now, username, message))
+    #changing messages.append to include messages_dict.
+    #REFACTORING: messages.append(messages_dict)
+    messages.append("({}) {}:{}".format(now, username, message))
     
 #creating function that will get all messages for us.
 def get_all_messages():
@@ -49,7 +51,7 @@ def index():
         
         #then we want to an another if statement to check if the username exists, and if so then we're going to redirect to personal chat page. So our username here and our username in session are both the same.
         if "username" in session:
-            return redirect(session["username"])
+            return redirect(url_for("user", username=session["username"]))
     
     """Main page with instructions"""
     #removing <Hello There>. 
@@ -60,11 +62,12 @@ def index():
 
 #creating routes/views using @app decorator, using <>, this then gets treated as a variable.
 #adding ability to accept post method in user view.
-@app.route('/<username>', methods = ["GET", "POST"])
+@app.route('/chat/<username>', methods = ["GET", "POST"])
 #argument of username
 def user(username):
     #using docstring to document. Good practice to document functions.
-    """Display chat messages"""
+    #updating docstring.
+    """Add and display chat messages"""
     #changing message using positional indicator and curley brackets, using .format method and sending in username and messages list.
         #correcting error, as 2 arguments listed but referenced only 1, so adding {1}. This will now display messages list.
     #changing message arguments to call the messages list.
@@ -83,31 +86,31 @@ def user(username):
         #messages came from form, so using request method.
         message = request.form["message"]
         #return to username
-        add_messages(username, message)
-        return redirect(session["username"])
+        add_message(username, message)
+        return redirect(url_for("user", username=session["username"]))
     
     #adding template to pass in chat.html, using two variables (username, messages) as arguments.
         
     return render_template("chat.html", username = username, chat_messages = messages)
     
     
-
+#REFRACTORING - THIS APP ROUTE CAN BE DELETED ENTIRELY, AS WE HAVE ALREADY CHAT MESSAGE BOX CREATED.
 #creating another app route decorator for sending message.
-@app.route("/<username>/<message>")
+#@app.route("/<username>/<message>")
 #creating function which binds to decorator, taking 2 arguments (username and message)
 
-def send_message(username, message):
+#def send_message(username, message):
    
     #Now want to store message in a list. Using docstring here to document.
-    """Create a new message and redirect back to the chat page"""
+    #"""Create a new message and redirect back to the chat page"""
     
     #using .format method to display message.
     
     #presenting our messages video: removing format method and calling add_messages function with username, message as arguments.
     #return "{0}: {1}".format(username, message)
-    add_messages(username, message)
+    #add_messages(username, message)
     #redirecting back to users welcome page.
-    return redirect(username)
+    #return redirect(username)
 
     
 

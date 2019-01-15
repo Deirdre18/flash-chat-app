@@ -735,7 +735,7 @@ And that's done.
 So now that our chat app is working okay and we've committed it to Git, in our next video we'll deploy our finished product to Heroku.
 
 # Heroku Deployment
- 
+
 ## What is it?
 
 Heroku
@@ -751,7 +751,7 @@ Creating a new Heroku app to host our code
 LESSON:
 
 Now it's time to unleash our Flask chat app in the wild.
-We're going to use what we learned in the Thorin & Company lesson to deploy it to Heroku.
+We're going to use what we learned in the Thorin & Company lesson to deploy it to Heroku. 
 But first, remember the things that are required to deploy an app to Heroku.
 Firstly, we need to have generated a requirements.txt file.
 Secondly, we need a Procfile.
