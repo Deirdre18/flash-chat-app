@@ -1,39 +1,25 @@
-<!--explanation mark and tab to put in standard html boilerplate.-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!--adding variable for username, another check to make sure html template is working.-->
     <title>Chat page for {{ username }}</title>
 </head>
 <body>
-    
-    <!--displaying welcome and chat messages as previously done. Passing in username variable from our view TO template.-->
     <h1>Welcome, {{ username }}</h1>
-    <!--passing in variable for chat_messages to template.-->
-    <!--removing chat messages and instead using % notation templating to format, making more attractive (as in Thorin & Co website). So as we loop through chat messages, message will be set to an individual message dictionary.-->
-    <!--cleaning up chat, and no longer using url but creating a message textbox (form).-->
     
     <form method = "POST">
-        
-        <textarea cols="50" rows="4" name="message" id="message"></textarea> 
+        <textarea cols="50" rows="4" name="message" id="message"></textarea>
         <br>
-        <button>Send Message</button>
+        <button>Send message</button>
     </form>
     
     {% for message in chat_messages %}
-    
-    <!--as using dictionery, we can use dot notation to get the values out of the keys. Each of the names after dot corresponds to one of the names that's in our dictionery, hence extracting the value from keys.-->
-         <p>({{ message.timestamp }}) {{ message.from }}: {{ message.message}}</p>
-    <!--adding end block notation, so template knows where block ends.-->
-    
-    {% endfor %} 
+        <p>({{ message.timestamp }}) {{ message.from }}: {{ message.message }}</p>
+    {% endfor %}
     
     <script>
-    //calling build-in javascript setTimeout function(), that runs a function at a given interval, and has 2 arguments - location.reload() and 5000 milliseconds (5 seconds).
-       
         let textbox = document.getElementById("message")
     
         let timer = setTimeout(function() {

@@ -1,4 +1,3 @@
-
 # to have access to environmental variables.
 import os
 #importing redirect module from flask library and datetime module.
@@ -11,32 +10,38 @@ app = Flask(__name__)
 #creating empty list
 #setting a session ID, using random list of letters, numbers and characters. Usually it is set as environmental variable (like IP address), but here we're setting it as a string. 
 #making secret key an environmental variable and leaving "randomsring123" as default value. 
-app.secret_key = (getos.getenv ("SECRET", "randomstring123")
+app.secret_key = os.getenv("SECRET", "randomstring123")
 messages = []
 
 #now creating a function (add_messages) which takes username and message as arguments and appends to the list.
 
 def add_message(username, message):
+    
     #then calling append method to messages list and append a string, using format method. Positional indicators {0}{1} are omitted, as in python3, it's optional to include them or not. If left out, first set of curley brackets automatically refers to 1st argument, 2nd set of curley brackets refer to 2nd argument. 
     #.creating 'now' variable using .now() method to get current time).
+    """Add messages to the `messages` list"""
+     
     now = datetime.now().strftime("%H:%M:%S")
     
     #creating dictionary in key-value pairs to store variables, rather than list (as can only access limited info).
     #moving messages_dict into messages.append, as we're not making changes/mutating it, but just calling it on next line. 
     #messages_dict = {"timestamp": now, "from": username, "message": message}
     #presenting our messages video: adding docstring.
-    """add messages to 'messages' list"""
+   
     #adding brackets, {} and now() method to get current time. 
     #modifiying messages.append, so as to append whole dictionary. 
     #changing messages.append to include messages_dict.
     #REFACTORING: messages.append(messages_dict)
-    messages.append("({}) {}:{}".format(now, username, message))
+    messages.append({"timestamp": now, "from": username, "message": message})
+    
+   
+
     
 #creating function that will get all messages for us.
-def get_all_messages():
-    """get all messages and separate using <br> - break tag"""
+#def get_all_messages():
+   # """get all messages and separate using <br> - break tag"""
     #using <br> to join all elements in messages together.
-    return"<br>".join(messages)
+    #return"<br>".join(messages)
 
 
 
@@ -45,20 +50,22 @@ def get_all_messages():
 #this is the function which will be bound to our decorator
 def index():
     #creating if statement to say tht if request method = POST, then we want to create a new variable called username. 
+    """Main page with instructions"""
     if request.method == "POST":
         
         # So we're going to create our session username variable - session["username"]. And we want that to be equal to request.form["username"], so the username that we typed and posted from our form.
         session["username"] = request.form["username"]
         
         #then we want to an another if statement to check if the username exists, and if so then we're going to redirect to personal chat page. So our username here and our username in session are both the same.
-        if "username" in session:
-            return redirect(url_for("user", username=session["username"]))
+    if "username" in session:
+        return redirect(url_for("user", username=session["username"]))
     
-    """Main page with instructions"""
+    #"""Main page with instructions"""
     #removing <Hello There>. 
     #don't use <> for sending message, as this will be interpreted by html and won't display properly.
     return render_template("index.html")
     #return "To send a message use /USERNAME/MESSAGE"
+    
 
 
 #creating routes/views using @app decorator, using <>, this then gets treated as a variable.
@@ -92,9 +99,9 @@ def user(username):
     
     #adding template to pass in chat.html, using two variables (username, messages) as arguments.
         
-    return render_template("chat.html", username = username, chat_messages = messages)
+    return render_template("chat.html", username=username, chat_messages=messages)
     
-    
+
 #REFRACTORING - THIS APP ROUTE CAN BE DELETED ENTIRELY, AS WE HAVE ALREADY CHAT MESSAGE BOX CREATED.
 #creating another app route decorator for sending message.
 #@app.route("/<username>/<message>")
@@ -113,11 +120,7 @@ def user(username):
     #redirecting back to users welcome page.
     #return redirect(username)
 
-    
-
-
 
 #environmental variables in cloud9 and also which we set ourselves in Heroku.  
 #adding default/fall-back values to IP and PORT. Setting debg=False, as we don't want debug=True set in production. 
-app.run(host=os.getenv("IP", 0.0.0.0), port=int(os.getenv("PORT", 5000)), debug=False)
-
+app.run(host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", "5000")), debug=False)
