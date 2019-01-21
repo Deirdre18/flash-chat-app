@@ -824,3 +824,7 @@ Below this video, we've included a link to a basic Flask quiz game, which will h
 Well done for completing the practical Python module of the course!
 We wish you all the best with your milestone project and look forward to seeing you in our next module.
 
+# Deployed App
+
+The deployed app can be viewed on [this link](https://flash-chatroom-project.herokuapp.com/) 
+
